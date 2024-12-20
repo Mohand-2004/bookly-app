@@ -1,8 +1,20 @@
-import 'package:bookly/features/home/presentation/UI/screens/home_screen.dart';
+import 'package:bookly/core/UI/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void main() {
+void main(){
+  appInit();
   runApp(const BooklyApp());
+}
+
+void appInit() {
+  WidgetsFlutterBinding.ensureInitialized();
+  ScreenUtil.ensureScreenSize();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitUp,
+  ]);
 }
 
 class BooklyApp extends StatelessWidget {
@@ -11,10 +23,15 @@ class BooklyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      home: const HomeScreen(),
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.dark(),
+        home: const SplashScreen(),
+      ),
     );
   }
 }
