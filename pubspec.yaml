@@ -37,6 +37,7 @@ dependencies:
   dartz: ^0.10.1
   flutter_native_splash: ^2.4.2
   flutter_slidable: ^3.1.1
+  font_awesome_flutter: ^10.8.0
   get: ^4.6.6
 
 
