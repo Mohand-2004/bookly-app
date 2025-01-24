@@ -1,0 +1,177 @@
+import 'package:bookly/core/UI/style/app_colors.dart';
+import 'package:bookly/core/extensions/context/media_query.dart';
+import 'package:bookly/core/extensions/context/navigation.dart';
+import 'package:bookly/core/models/book_model.dart';
+import 'package:bookly/features/home/presentation/UI/widgets/book_rating_widget.dart';
+import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/books_details_screen_appbar.dart';
+import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/two_color_container_text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class BookDetailsScreen extends StatelessWidget {
+  final Book book;
+  const BookDetailsScreen({super.key,required this.book,});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.darkPurple,
+      appBar: BooksDetailsScreenAppbar(
+        cancelCommand: (){
+          context.pop();
+        },
+        downloadCommand: (){
+
+        }
+      ),
+
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // top space
+          SizedBox(height: 15.h,),
+
+          // books image widget
+          Center(
+            child: Container(
+              width: (context.screenWidth > 500 ? 120 : 140).w,
+              height: 190.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25.r,),
+                image: book.hasImage? DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(book.imageUrl!,),
+                ) : null,
+              ),
+              child: !book.hasImage ? Icon(
+                Icons.hide_image_rounded,
+                color: AppColors.white,
+                size: 40.r,
+              ) : null,
+            ),
+          ),
+
+          // space between widgets
+          SizedBox(height: 25.h,),
+
+          // book title text widget
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Text(
+              book.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppColors.white,
+                fontSize: 28.r,
+                fontWeight: FontWeight.w700
+              ),
+            ),
+          ),
+
+          // space between widgets
+          SizedBox(height: 5.h,),
+
+          // book author text widget 
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Text(
+              book.authors,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.montserrat(
+                fontSize: 14.r,
+                fontWeight: FontWeight.normal,
+                color: AppColors.white,
+              ),
+            ),
+          ),
+
+          // space between widgets
+          SizedBox(height: 15.h,),
+
+          // book rating widget 
+          Row(
+            children: [
+              const Spacer(),
+              BookRatingWidget(book: book,),
+              const Spacer(),
+            ],
+          ),
+
+
+          // space between widgets
+          SizedBox(height: 25.h,),
+
+
+          // book price widget
+          TwoColorContainerText(
+            height: 42.h,
+            width: context.screenWidth - 76.w,
+            text1: book.price,
+            text2: 'Free Preview',
+            raduis: 15.r,
+            fonstSized: 16.r,
+            action1: (){},
+            action2: (){},
+          ),
+           
+          // space between widgets
+          SizedBox(height: 30.h,),
+
+          // suggested books text widget
+          Row(
+            children: [
+              SizedBox(width: 22.w,),
+              Text(
+                'You can also like',
+                style: GoogleFonts.montserrat(
+                  fontSize: 16.r,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.white,
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
+
+
+          // space between widgets
+          SizedBox(height: 10.h,),
+
+          // suggested books listview widget
+          Expanded(
+            child: SizedBox(
+              child: ListView.builder(
+                itemCount: 10,
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.only(left: 22.w,),
+                itemBuilder: (context,index){
+                  return AspectRatio(
+                    aspectRatio: 2/3,
+                    child: Container(
+                      margin: EdgeInsets.only(right: 8.w,),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.r,),
+                        image: const DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/images/test.png'),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              ),
+            ),
+          ),
+
+          // bottom space
+          SizedBox(height: 18.h,)
+        ],
+      ),
+    );
+  }
+}
