@@ -1,4 +1,5 @@
 import 'package:bookly/core/data/home_data_source.dart';
+import 'package:bookly/core/models/book_model.dart';
 import 'package:dio/dio.dart';
 
 class GoogleApiHomeDataSourecImplementation implements HomeDataSource {
@@ -14,6 +15,12 @@ class GoogleApiHomeDataSourecImplementation implements HomeDataSource {
   @override
   Future<List<Map>> getFeaturedBooks() async {
     var response = await _dio.get("${_baseUrl}volumes?q=subjet:Programming&Filtering=free-ebooks");
+    return List<Map>.from(response.data['items']);
+  }
+
+  @override
+  Future<List<Map>> getSimilarBooks(Book book) async {
+    var response = await _dio.get("${_baseUrl}volumes?q=title:${book.title}&Filtering=free-ebooks&Sorting=relevence");
     return List<Map>.from(response.data['items']);
   }
 }

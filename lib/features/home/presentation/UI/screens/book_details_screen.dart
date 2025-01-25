@@ -2,12 +2,16 @@ import 'package:bookly/core/UI/style/app_colors.dart';
 import 'package:bookly/core/extensions/context/media_query.dart';
 import 'package:bookly/core/extensions/context/navigation.dart';
 import 'package:bookly/core/models/book_model.dart';
+import 'package:bookly/features/home/domain/home_repo.dart';
 import 'package:bookly/features/home/presentation/UI/widgets/book_rating_widget.dart';
 import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/books_details_screen_appbar.dart';
+import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/similar_books_listveiw.dart';
+import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/similer_books_loading_widget.dart';
 import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/two_color_container_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class BookDetailsScreen extends StatelessWidget {
   final Book book;
@@ -31,7 +35,7 @@ class BookDetailsScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // top space
-          SizedBox(height: 15.h,),
+          SizedBox(height: 5.h,),
 
           // books image widget
           Center(
@@ -54,7 +58,7 @@ class BookDetailsScreen extends StatelessWidget {
           ),
 
           // space between widgets
-          SizedBox(height: 25.h,),
+          SizedBox(height: 20.h,),
 
           // book title text widget
           Padding(
@@ -65,7 +69,7 @@ class BookDetailsScreen extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: AppColors.white,
-                fontSize: 28.r,
+                fontSize: 25.r,
                 fontWeight: FontWeight.w700
               ),
             ),
@@ -103,7 +107,7 @@ class BookDetailsScreen extends StatelessWidget {
 
 
           // space between widgets
-          SizedBox(height: 25.h,),
+          SizedBox(height: 15.h,),
 
 
           // book price widget
@@ -114,12 +118,16 @@ class BookDetailsScreen extends StatelessWidget {
             text2: 'Free Preview',
             raduis: 15.r,
             fonstSized: 16.r,
-            action1: (){},
-            action2: (){},
+            action1: (){
+              // TODO open book preview link webveiw page
+            },
+            action2: (){
+              // TODO open download page link webveiw page
+            },
           ),
            
           // space between widgets
-          SizedBox(height: 30.h,),
+          SizedBox(height: 20.h,),
 
           // suggested books text widget
           Row(
@@ -144,26 +152,28 @@ class BookDetailsScreen extends StatelessWidget {
           // suggested books listview widget
           Expanded(
             child: SizedBox(
-              child: ListView.builder(
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                padding: EdgeInsets.only(left: 22.w,),
-                itemBuilder: (context,index){
-                  return AspectRatio(
-                    aspectRatio: 2/3,
-                    child: Container(
-                      margin: EdgeInsets.only(right: 8.w,),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r,),
-                        image: const DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage('assets/images/test.png'),
+              child: FutureBuilder(
+                future: HomeRepo.getSimilarBooks(book,),
+                builder: (context, snapshot){
+                  if (snapshot.hasData){
+                    return SimilarBooksListveiw(books: snapshot.data!,);
+                  }
+                  else if (snapshot.hasError){
+                    return Center(
+                      child: Text(
+                        snapshot.error.toString(),
+                        style: GoogleFonts.montserrat(
+                          fontSize: 16.r,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.white,
                         ),
                       ),
-                    ),
-                  );
-                }
+                    );
+                  }
+                  else{
+                    return const SimilarBooksLoadingWidget();
+                  }
+                },
               ),
             ),
           ),
@@ -175,3 +185,4 @@ class BookDetailsScreen extends StatelessWidget {
     );
   }
 }
+

@@ -1,3 +1,4 @@
+import 'package:bookly/core/DI/main_di.dart';
 import 'package:bookly/core/data/home_data_source.dart';
 import 'package:bookly/core/models/book_model.dart';
 import 'package:bookly/core/models/failure_model.dart';
@@ -34,5 +35,15 @@ class HomeRepo {
     catch (e){
       return left(Failure(e.toString(),),);
     }
+  }
+
+  static Future<List<Book>> getSimilarBooks(Book book) async {
+    final HomeDataSource homeDataSource = getIt();
+    List<Book> books = [];
+    var response = await homeDataSource.getSimilarBooks(book,);
+    for (Map json in response){
+      books.add(Book.fromJson(json,),);
+    }
+    return books;
   }
 }
