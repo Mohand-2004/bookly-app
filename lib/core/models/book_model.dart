@@ -1,7 +1,7 @@
 class Book{
   final String title;
   late final List<String> _authorsNames;
-  late final double? _rating;
+  late final num? _rating;
   final int ratingCount;
   final String? imageUrl;
   final String? previewLink;
@@ -10,7 +10,7 @@ class Book{
   Book({
     required this.title,
     required List<String> authorsNames,
-    int? rating,
+    num? rating,
     this.ratingCount = 0,
     this.imageUrl,
     this.previewLink,
@@ -24,10 +24,10 @@ class Book{
     return Book(
       title: json['volumeInfo']['title'],
       authorsNames: List<String>.from(json['volumeInfo']['authors'] ?? [],),
-      rating: json['averageRating'],
-      ratingCount: json['ratingsCount'] ?? 0,
-      imageUrl: json['volumeInfo']['imageLinks']['thumbnail'],
-      previewLink: json['previewLink'],
+      rating: json['volumeInfo']['averageRating'],
+      ratingCount: json['volumeInfo']['ratingsCount'] ?? 0,
+      imageUrl: json['volumeInfo']['imageLinks']?['thumbnail'] ?? '',
+      previewLink: json['volumeInfo']['previewLink'],
       downloadLink: json['accessInfo']['pdf']['acsTokenLink'],
     );
   }

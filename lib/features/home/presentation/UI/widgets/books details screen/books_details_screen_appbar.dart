@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BooksDetailsScreenAppbar extends StatelessWidget implements PreferredSizeWidget {
   final void Function() cancelCommand;
-  final void Function() downloadCommand;
-  const BooksDetailsScreenAppbar({super.key, required this.cancelCommand, required this.downloadCommand});
+  final void Function()? downloadCommand;
+  const BooksDetailsScreenAppbar({super.key, required this.cancelCommand, this.downloadCommand});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class BooksDetailsScreenAppbar extends StatelessWidget implements PreferredSizeW
           const Spacer(),
 
           // cart icon button
-          GestureDetector(
+          downloadCommand == null ? const SizedBox() : GestureDetector(
             onTap: downloadCommand,
             child: Icon(
               Icons.download_rounded,
