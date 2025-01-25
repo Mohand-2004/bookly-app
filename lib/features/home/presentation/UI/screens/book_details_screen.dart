@@ -4,7 +4,7 @@ import 'package:bookly/core/extensions/context/navigation.dart';
 import 'package:bookly/core/models/book_model.dart';
 import 'package:bookly/features/home/domain/home_repo.dart';
 import 'package:bookly/features/home/presentation/UI/screens/book_preveiw_screen.dart';
-import 'package:bookly/features/home/presentation/UI/widgets/book_rating_widget.dart';
+import 'package:bookly/core/UI/widgets/book_rating_widget.dart';
 import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/books_details_screen_appbar.dart';
 import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/similar_books_listveiw.dart';
 import 'package:bookly/features/home/presentation/UI/widgets/books%20details%20screen/similer_books_loading_widget.dart';
