@@ -2,6 +2,7 @@ import 'package:bookly/core/UI/style/app_colors.dart';
 import 'package:bookly/core/extensions/context/media_query.dart';
 import 'package:bookly/core/extensions/context/navigation.dart';
 import 'package:bookly/core/models/book_model.dart';
+import 'package:bookly/core/services/url_lancher_service.dart';
 import 'package:bookly/features/home/domain/home_repo.dart';
 import 'package:bookly/features/home/presentation/UI/screens/book_preveiw_screen.dart';
 import 'package:bookly/core/UI/widgets/book_rating_widget.dart';
@@ -26,7 +27,7 @@ class BookDetailsScreen extends StatelessWidget {
           context.pop();
         },
         downloadCommand: book.canBeDownloaded ? (){
-
+          UrlLanchService.openUrl(book.downloadLink!);
         } : null,
       ),
 
@@ -120,9 +121,7 @@ class BookDetailsScreen extends StatelessWidget {
             text2: book.canBePreviewd ?  'Free Preview' : 'No Preview',
             raduis: 15.r,
             fonstSized: 16.r,
-            action1: (){
-              // TODO open download page link webveiw page
-            },
+            action1: (){},
             action2: (){
               if (book.canBePreviewd){
                 context.push(
