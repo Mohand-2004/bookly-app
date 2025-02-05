@@ -1,6 +1,9 @@
+import 'package:bookly/core/extensions/string/validations.dart';
+
 class Book{
+  final String id;
   final String title;
-  late final List<String> _authorsNames;
+  late final List<String> authorsNames;
   late final num? _rating;
   final int ratingCount;
   final String? imageUrl;
@@ -8,8 +11,9 @@ class Book{
   final String? downloadLink;
 
   Book({
+    required this.id,
     required this.title,
-    required List<String> authorsNames,
+    required this.authorsNames,
     num? rating,
     this.ratingCount = 0,
     this.imageUrl,
@@ -17,11 +21,11 @@ class Book{
     this.downloadLink,
   }){
     _rating = rating?.toDouble();
-    _authorsNames = authorsNames;
   }
 
   factory Book.fromJson(Map json){
     return Book(
+      id: json['id'],
       title: json['volumeInfo']['title'],
       authorsNames: List<String>.from(json['volumeInfo']['authors'] ?? [],),
       rating: json['volumeInfo']['averageRating'],
@@ -32,10 +36,23 @@ class Book{
     );
   }
 
-  bool get canBeDownloaded => downloadLink != null;
-  bool get canBePreviewd => previewLink != null;
-  bool get hasImage => imageUrl != null;
-  String get rating => (_rating == null ? 'No Rating' : _rating.toString());
+  factory Book.fromLocalDataSource(Map json){
+    return Book(
+      id: json['id'],
+      title: json['title'],
+      authorsNames: List<String>.from(json['authors'],),
+      rating: json['rating'],
+      ratingCount: json['rating_count'],
+      imageUrl: json['image_url'],
+      previewLink: json['preview_link'],
+      downloadLink: json['download_link'],
+    );
+  }
+
+  bool get canBeDownloaded => downloadLink.hasValue;
+  bool get canBePreviewd => previewLink.hasValue;
+  bool get hasImage => imageUrl.hasValue;
+  String get rating => (_rating == null || _rating == 0 ? 'No Rating' : _rating.toString());
   String get price => 'Free';
-  String get authors => _authorsNames.join(', ');
+  String get authors => authorsNames.join(', ');
 }

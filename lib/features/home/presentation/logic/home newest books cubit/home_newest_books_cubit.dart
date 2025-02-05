@@ -1,18 +1,18 @@
 import 'package:bookly/core/models/book_model.dart';
-import 'package:bookly/features/home/domain/home_repo.dart';
+import 'package:bookly/features/home/domain/use%20cases/get_newest_books_use_case.dart';
 import 'package:bookly/features/home/presentation/logic/home%20newest%20books%20cubit/states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeNewestBooksCubit extends Cubit<HomeNewestBooksState>{
-  final HomeRepo _homeRepo;
+  final GetNewestBooksUseCase _useCase;
   List<Book> _newestBooks = [];
-  HomeNewestBooksCubit(this._homeRepo,) : super(NewsetBooksInitial()){
+  HomeNewestBooksCubit(this._useCase,) : super(NewsetBooksInitial()){
     _getNewestBooks();
   }
 
   void _getNewestBooks() async {
     emit(NewsetBooksLoadingState(),);
-    var result = await _homeRepo.getNewestBooks();
+    var result = await _useCase.execute();
     result.fold(
       (failure){
         emit(NewsetBooksErrorState(failure,),);

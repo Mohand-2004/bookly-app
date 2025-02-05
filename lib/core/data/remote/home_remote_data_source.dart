@@ -1,6 +1,6 @@
 import 'package:bookly/core/models/book_model.dart';
 
-abstract class HomeDataSource {
+abstract class HomeRemoteDataSource {
   Future<List<Map>> getFeaturedBooks();
 
   Future<List<Map>> getNewestBooks();

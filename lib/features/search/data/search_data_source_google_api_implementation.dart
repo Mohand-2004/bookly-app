@@ -1,7 +1,7 @@
-import 'package:bookly/core/data/search_data_source.dart';
+import 'package:bookly/core/data/remote/search_remote_data_source.dart';
 import 'package:dio/dio.dart';
 
-class SearchDataSourecGoogleApiImplementation implements SearchDataSource{
+class SearchDataSourecGoogleApiImplementation implements SearchRemoteDataSource{
   final String _baseUrl = 'https://www.googleapis.com/books/v1/';
   final Dio _dio = Dio();
   @override

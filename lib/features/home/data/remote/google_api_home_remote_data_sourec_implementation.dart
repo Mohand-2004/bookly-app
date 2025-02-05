@@ -1,8 +1,8 @@
-import 'package:bookly/core/data/home_data_source.dart';
+import 'package:bookly/core/data/remote/home_remote_data_source.dart';
 import 'package:bookly/core/models/book_model.dart';
 import 'package:dio/dio.dart';
 
-class GoogleApiHomeDataSourecImplementation implements HomeDataSource {
+class GoogleApiHomeDataSourecImplementation implements HomeRemoteDataSource {
   final String _baseUrl = 'https://www.googleapis.com/books/v1/';
   final Dio _dio = Dio();
 
