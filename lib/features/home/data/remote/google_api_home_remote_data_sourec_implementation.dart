@@ -7,20 +7,20 @@ class GoogleApiHomeDataSourecImplementation implements HomeRemoteDataSource {
   final Dio _dio = Dio();
 
   @override
-  Future<List<Map>> getNewestBooks() async {
-    var response = await _dio.get("${_baseUrl}volumes?q=subjet:Programming&Filtering=free-ebooks&Sorting=newest");
+  Future<List<Map>> getNewestBooks([int pageNumber = 0]) async {
+    var response = await _dio.get("${_baseUrl}volumes?q=subjet:Programming&Filtering=free-ebooks&startIndex=${pageNumber*10}&Sorting=newest");
     return List<Map>.from(response.data['items']);
   }
 
   @override
-  Future<List<Map>> getFeaturedBooks() async {
-    var response = await _dio.get("${_baseUrl}volumes?q=subjet:Programming&Filtering=free-ebooks");
+  Future<List<Map>> getFeaturedBooks([int pageNumber = 0]) async {
+    var response = await _dio.get("${_baseUrl}volumes?Filtering=free-ebooks&startIndex=${pageNumber*10}&q=subjet:Programming");
     return List<Map>.from(response.data['items']);
   }
 
   @override
-  Future<List<Map>> getSimilarBooks(Book book) async {
-    var response = await _dio.get("${_baseUrl}volumes?q=title:${book.title}&Filtering=free-ebooks&Sorting=relevence");
+  Future<List<Map>> getSimilarBooks(Book book,[int pageNumber = 0]) async {
+    var response = await _dio.get("${_baseUrl}volumes?q=title:${book.title}&Filtering=free-ebooks&startIndex=${pageNumber*10}&Sorting=relevence");
     return List<Map>.from(response.data['items']);
   }
 }

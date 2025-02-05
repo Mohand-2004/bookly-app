@@ -8,12 +8,12 @@ class HomeFeaturedBooksCubit extends Cubit<HomeFeaturedBooksState> {
   List<Book> _featuredBooks = [];
 
   HomeFeaturedBooksCubit(this._booksUseCase,) : super(HomeFeaturedBooksInitial()){
-    _getFeaturedBooks();
+    getFeaturedBooks();
   }
 
-  void _getFeaturedBooks() async {
+  void getFeaturedBooks([int pageNumber = 0]) async {
     emit(FeaturedBooksLoadingState());
-    var result = await _booksUseCase.execute();
+    var result = await _booksUseCase.execute(pageNumber);
     result.fold(
       (failure){
         emit(FeaturedBooksErrorState(failure));

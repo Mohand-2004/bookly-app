@@ -4,12 +4,12 @@ import 'package:bookly/core/models/general_use_case.dart';
 import 'package:bookly/features/home/domain/repos/home_repo.dart';
 import 'package:dartz/dartz.dart';
 
-class GetNewestBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,void> {
+class GetNewestBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,int> {
   final HomeRepo _homeRepo;
 
   GetNewestBooksUseCase(this._homeRepo);
   @override
-  Future<Either<Failure, List<Book>>> execute([void param]) async {
+  Future<Either<Failure, List<Book>>> execute([int param = 0]) async {
     List<Book> books = [];
     // get books from cache
     final cacheResult = await _homeRepo.getCachedNewestBooks();
@@ -27,7 +27,7 @@ class GetNewestBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,vo
     }
 
     // get books from remote
-    final remoteResult = await _homeRepo.getNewestBooks();
+    final remoteResult = await _homeRepo.getNewestBooks(param);
     remoteResult.fold(
       (failure){
         return left(failure,);

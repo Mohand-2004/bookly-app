@@ -4,12 +4,13 @@ import 'package:bookly/core/models/general_use_case.dart';
 import 'package:bookly/features/home/domain/repos/home_repo.dart';
 import 'package:dartz/dartz.dart';
 
-class GetFeaturedBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,void> {
+class GetFeaturedBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,int> {
   final HomeRepo _homeRepo;
+    static int nextPageNumber = 1;
 
   GetFeaturedBooksUseCase(this._homeRepo);
   @override
-  Future<Either<Failure,List<Book>>> execute([void param]) async {
+  Future<Either<Failure,List<Book>>> execute([int param = 0]) async {
     List<Book> books = [];
     // get books from cache
     final cacheResult = await _homeRepo.getCachedFeaturedBooks();
@@ -22,12 +23,12 @@ class GetFeaturedBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,
       }
     );
 
-    if (books.isNotEmpty){
+    if (books.isNotEmpty && param != GetFeaturedBooksUseCase.nextPageNumber){
       return right(books,);
     }
 
     // get books from remote
-    final remoteResult = await _homeRepo.getFeaturedBooks();
+    final remoteResult = await _homeRepo.getFeaturedBooks(param);
     remoteResult.fold(
       (failure){
         return left(failure,);
@@ -35,6 +36,7 @@ class GetFeaturedBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,
       (remoteBooks) async {
         // cache books
         await _homeRepo.cacheFeaturedBooks(remoteBooks,);
+        GetFeaturedBooksUseCase.nextPageNumber++;
       }
     );
 

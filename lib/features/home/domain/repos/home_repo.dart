@@ -11,9 +11,9 @@ class HomeRepo {
 
   HomeRepo(this._homeDataSource,this._homeLocalDataSource,);
 
-  Future<Either<Failure,List<Book>>> getNewestBooks() async {
+  Future<Either<Failure,List<Book>>> getNewestBooks([int pageNumber = 0]) async {
     try{
-      var response = await _homeDataSource.getNewestBooks();
+      var response = await _homeDataSource.getNewestBooks(pageNumber);
       List<Book> newestBooks = [];
       for (Map json in response){
         newestBooks.add(Book.fromJson(json,),);
@@ -25,9 +25,9 @@ class HomeRepo {
     }
   }
 
-  Future<Either<Failure,List<Book>>> getFeaturedBooks() async {
+  Future<Either<Failure,List<Book>>> getFeaturedBooks([int pageNumber = 0]) async {
     try{
-      var response = await _homeDataSource.getFeaturedBooks();
+      var response = await _homeDataSource.getFeaturedBooks(pageNumber,);
       List<Book> featuredBooks = [];
       for (Map json in response){
         featuredBooks.add(Book.fromJson(json,),);
@@ -99,10 +99,10 @@ class HomeRepo {
     }
   }
 
-  static Future<List<Book>> getSimilarBooks(Book book) async {
+  static Future<List<Book>> getSimilarBooks(Book book,[int pageNumber = 0]) async {
     final HomeRemoteDataSource homeDataSource = getIt();
     List<Book> books = [];
-    var response = await homeDataSource.getSimilarBooks(book,);
+    var response = await homeDataSource.getSimilarBooks(book,pageNumber,);
     for (Map json in response){
       books.add(Book.fromJson(json,),);
     }

@@ -7,12 +7,12 @@ class HomeNewestBooksCubit extends Cubit<HomeNewestBooksState>{
   final GetNewestBooksUseCase _useCase;
   List<Book> _newestBooks = [];
   HomeNewestBooksCubit(this._useCase,) : super(NewsetBooksInitial()){
-    _getNewestBooks();
+    getNewestBooks();
   }
 
-  void _getNewestBooks() async {
+  void getNewestBooks([int pageNumber = 0]) async {
     emit(NewsetBooksLoadingState(),);
-    var result = await _useCase.execute();
+    var result = await _useCase.execute(pageNumber);
     result.fold(
       (failure){
         emit(NewsetBooksErrorState(failure,),);
