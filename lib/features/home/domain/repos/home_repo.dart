@@ -70,13 +70,13 @@ class HomeRepo {
   }
 
   Future<Either<Failure,List<Book>>> getCachedNewestBooks() async {
-    try{
+    // try{
       final books = await _homeLocalDataSource.getNewestBooks();
       return right(books,);
-    }
-    catch (e){
-      return left(Failure(e.toString(),),);
-    }
+    // }
+    // catch (e){
+    //   return left(Failure(e.toString(),),);
+    // }
   }
 
   Future<Either<Failure,void>> deleteFeaturedBooksCache() async {

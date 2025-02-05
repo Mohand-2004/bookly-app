@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 
 class GetNewestBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,int> {
   final HomeRepo _homeRepo;
+  static int nextPageNumber = 1;
 
   GetNewestBooksUseCase(this._homeRepo);
   @override
@@ -22,8 +23,16 @@ class GetNewestBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,in
       }
     );
 
-    if (books.isNotEmpty){
-      return right(books,);
+    if (param == 0){
+      GetNewestBooksUseCase.nextPageNumber = (books.length ~/ 10) + 1;
+    }
+
+    if (param != 0){
+      param = GetNewestBooksUseCase.nextPageNumber;
+    }
+
+    if (books.isNotEmpty && param == 0){
+      return right((param == 0 ? books : []),);
     }
 
     // get books from remote
@@ -35,6 +44,7 @@ class GetNewestBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,in
       (remoteBooks) async {
         // cache books
         await _homeRepo.cacheNewestBooks(remoteBooks,);
+        if(param != 0) GetNewestBooksUseCase.nextPageNumber++;
       }
     );
 

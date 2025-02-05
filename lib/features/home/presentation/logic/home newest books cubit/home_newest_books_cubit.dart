@@ -5,20 +5,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeNewestBooksCubit extends Cubit<HomeNewestBooksState>{
   final GetNewestBooksUseCase _useCase;
-  List<Book> _newestBooks = [];
+  final List<Book> _newestBooks = [];
   HomeNewestBooksCubit(this._useCase,) : super(NewsetBooksInitial()){
     getNewestBooks();
   }
 
-  void getNewestBooks([int pageNumber = 0]) async {
-    emit(NewsetBooksLoadingState(),);
+  Future<void> getNewestBooks([int pageNumber = 0]) async {
+    if(pageNumber == 0) emit(NewsetBooksLoadingState(),);
     var result = await _useCase.execute(pageNumber);
     result.fold(
       (failure){
         emit(NewsetBooksErrorState(failure,),);
       },
       (books){
-        _newestBooks = books;
+        _newestBooks.addAll(books,);
         emit(NewsetBooksSuccessState(),);
       }
     );

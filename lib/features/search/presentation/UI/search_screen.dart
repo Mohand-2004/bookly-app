@@ -1,6 +1,7 @@
 import 'package:bookly/core/DI/main_di.dart';
 import 'package:bookly/core/UI/style/app_colors.dart';
 import 'package:bookly/core/UI/widgets/my_sub_appbar.dart';
+import 'package:bookly/features/search/domain/search_repo.dart';
 import 'package:bookly/features/search/presentation/UI/widgets/search_feild.dart';
 import 'package:bookly/features/search/presentation/UI/widgets/search_result_loading_widget_boosk.dart';
 import 'package:bookly/features/search/presentation/UI/widgets/search_results_listveiw.dart';
@@ -42,6 +43,7 @@ class SearchScreen extends StatelessWidget {
                       textColor: AppColors.white,
                       focusedBorderColor: AppColors.white,
                       searchCommand: (value){
+                        SearchRepo.searchValue = value;
                         context.read<SearchCubit>().searchBooks(value,);
                       } 
                     ),
