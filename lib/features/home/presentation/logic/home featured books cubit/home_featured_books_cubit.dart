@@ -5,21 +5,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeFeaturedBooksCubit extends Cubit<HomeFeaturedBooksState> {
   final GetFeaturedBooksUseCase _booksUseCase;
-  List<Book> _featuredBooks = [];
+  final List<Book> _featuredBooks = [];
 
   HomeFeaturedBooksCubit(this._booksUseCase,) : super(HomeFeaturedBooksInitial()){
     getFeaturedBooks();
   }
 
-  void getFeaturedBooks([int pageNumber = 0]) async {
-    emit(FeaturedBooksLoadingState());
+  Future<void> getFeaturedBooks([int pageNumber = 0]) async {
+    if (pageNumber == 0) emit(FeaturedBooksLoadingState());
     var result = await _booksUseCase.execute(pageNumber);
     result.fold(
       (failure){
         emit(FeaturedBooksErrorState(failure));
       },
       (books){
-        _featuredBooks = books;
+        _featuredBooks.addAll(books);
         emit(FeaturedBooksSuccessState());
       }
     );

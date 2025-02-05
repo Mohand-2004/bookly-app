@@ -23,8 +23,12 @@ class GetFeaturedBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,
       }
     );
 
-    if (books.isNotEmpty && param != GetFeaturedBooksUseCase.nextPageNumber){
-      return right(books,);
+    if (param == 0){
+      GetFeaturedBooksUseCase.nextPageNumber = (books.length ~/ 10) + 1;
+    }
+
+    if (books.isNotEmpty && param < GetFeaturedBooksUseCase.nextPageNumber){
+      return right((param == 0 ? books : []),);
     }
 
     // get books from remote
@@ -36,7 +40,7 @@ class GetFeaturedBooksUseCase extends GeneralUseCase<Either<Failure,List<Book>>,
       (remoteBooks) async {
         // cache books
         await _homeRepo.cacheFeaturedBooks(remoteBooks,);
-        GetFeaturedBooksUseCase.nextPageNumber++;
+        if(param != 0) GetFeaturedBooksUseCase.nextPageNumber++;
       }
     );
 

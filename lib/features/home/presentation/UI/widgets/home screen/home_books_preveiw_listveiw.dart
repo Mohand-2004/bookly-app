@@ -3,13 +3,48 @@ import 'package:bookly/core/extensions/context/media_query.dart';
 import 'package:bookly/core/extensions/context/navigation.dart';
 import 'package:bookly/core/models/book_model.dart';
 import 'package:bookly/features/home/presentation/UI/screens/book_details_screen.dart';
+import 'package:bookly/features/home/presentation/logic/home%20featured%20books%20cubit/home_featured_books_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HomeBooksPreveiwListveiw extends StatelessWidget {
+class HomeBooksPreveiwListveiw extends StatefulWidget {
   final List<Book> books;
   const HomeBooksPreveiwListveiw({super.key,required this.books,});
+
+  @override
+  State<HomeBooksPreveiwListveiw> createState() => _HomeBooksPreveiwListveiwState();
+}
+
+class _HomeBooksPreveiwListveiwState extends State<HomeBooksPreveiwListveiw> {
+  late ScrollController _scrollController;
+  int nextPageNumber = 1;
+  bool isloading = false;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() async {
+    if (_scrollController.position.pixels >= 0.7 * _scrollController.position.maxScrollExtent) {
+      if (!isloading){
+        isloading = true;
+        await context.read<HomeFeaturedBooksCubit>().getFeaturedBooks(
+          nextPageNumber++
+        );
+        isloading = false;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +52,14 @@ class HomeBooksPreveiwListveiw extends StatelessWidget {
       width: context.screenWidth,
       height: 260.r,
       child: ListView.builder(
-        itemCount: books.length,
+        itemCount: widget.books.length,
         scrollDirection: Axis.horizontal,
+        controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index){
           return GestureDetector(
             onTap: (){
-              context.push(BookDetailsScreen(book: books[index],));
+              context.push(BookDetailsScreen(book: widget.books[index],));
             },
             child: Padding(
               padding: EdgeInsets.only(right: 10.w,),
@@ -32,7 +68,7 @@ class HomeBooksPreveiwListveiw extends StatelessWidget {
                 child: AspectRatio(
                   aspectRatio: 2/3,
                   child: CachedNetworkImage(
-                    imageUrl: books[index].imageUrl ?? 'Error',
+                    imageUrl: widget.books[index].imageUrl ?? 'Error',
                     fit: BoxFit.fill,
                     errorWidget: (context, url, error) => Icon(
                       Icons.hide_image_rounded,
