@@ -35,7 +35,7 @@ class SearchCubit extends Cubit<SearchState> {
     var result = await _searchRepo.searchBooks(searchText,pageNumber);
     result.fold(
       (faluire){
-        emit(SearchError(faluire,),);
+        pageNumber == 0 ? emit(SearchError(faluire,),) : emit(PaginationError(faluire,));
       },
       (books){
         _books.addAll(books);

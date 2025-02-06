@@ -12,3 +12,8 @@ class SearchError extends SearchState{
   final Failure failure;
   SearchError(this.failure);
 }
+
+class PaginationError extends SearchState{
+  final Failure failure;
+  PaginationError(this.failure);
+}

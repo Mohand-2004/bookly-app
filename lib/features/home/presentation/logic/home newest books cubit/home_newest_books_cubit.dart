@@ -15,7 +15,7 @@ class HomeNewestBooksCubit extends Cubit<HomeNewestBooksState>{
     var result = await _useCase.execute(pageNumber);
     result.fold(
       (failure){
-        emit(NewsetBooksErrorState(failure,),);
+        pageNumber == 0 ? emit(NewsetBooksErrorState(failure,),) : emit(PaginationErrorState(failure,));
       },
       (books){
         _newestBooks.addAll(books,);

@@ -1,4 +1,5 @@
 import 'package:bookly/core/UI/style/app_colors.dart';
+import 'package:bookly/core/UI/widgets/no_more_books_data_widget.dart';
 import 'package:bookly/core/extensions/context/media_query.dart';
 import 'package:bookly/core/extensions/context/navigation.dart';
 import 'package:bookly/core/models/book_model.dart';
@@ -52,34 +53,42 @@ class _HomeBooksPreveiwListveiwState extends State<HomeBooksPreveiwListveiw> {
       width: context.screenWidth,
       height: 260.r,
       child: ListView.builder(
-        itemCount: widget.books.length,
+        itemCount: widget.books.length + 1,
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index){
-          return GestureDetector(
-            onTap: (){
-              context.push(BookDetailsScreen(book: widget.books[index],));
-            },
-            child: Padding(
-              padding: EdgeInsets.only(right: 10.w,),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(25.r),
-                child: AspectRatio(
-                  aspectRatio: 2/3,
-                  child: CachedNetworkImage(
-                    imageUrl: widget.books[index].imageUrl ?? 'Error',
-                    fit: BoxFit.fill,
-                    errorWidget: (context, url, error) => Icon(
-                      Icons.hide_image_rounded,
-                      color: AppColors.white,
-                      size: 40.r,
+          if (index == widget.books.length) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w,),
+              child: const NoMoreBooksDataWidget(),
+            );
+          }
+          else{
+            return GestureDetector(
+              onTap: (){
+                context.push(BookDetailsScreen(book: widget.books[index],));
+              },
+              child: Padding(
+                padding: EdgeInsets.only(right: 10.w,),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.r),
+                  child: AspectRatio(
+                    aspectRatio: 2/3,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.books[index].imageUrl ?? 'Error',
+                      fit: BoxFit.fill,
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.hide_image_rounded,
+                        color: AppColors.white,
+                        size: 40.r,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          );
+            );
+          }
         }
       ),
     );

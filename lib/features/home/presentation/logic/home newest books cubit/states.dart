@@ -12,3 +12,8 @@ class NewsetBooksErrorState extends HomeNewestBooksState{
   final Failure failure;
   NewsetBooksErrorState(this.failure);
 }
+
+class PaginationErrorState extends HomeNewestBooksState{
+  final Failure failure;
+  PaginationErrorState(this.failure);
+}

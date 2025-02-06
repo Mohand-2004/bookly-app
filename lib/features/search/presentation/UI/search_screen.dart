@@ -53,7 +53,7 @@ class SearchScreen extends StatelessWidget {
                 
                     // result search text
                     BlocBuilder<SearchCubit,SearchState>(
-                      builder: (context,state) => (state is SearchSucess) ? Text(
+                      builder: (context,state) => (state is SearchSucess || state is PaginationError) ? Text(
                         "Search Result",
                         style: GoogleFonts.montserrat(
                           fontSize: 14.r,
@@ -97,10 +97,7 @@ class SearchScreen extends StatelessWidget {
                                 ],
                               );
                             }
-                            else if (state is SearchSucess){
-                              return SearchResultsListveiw(books: context.read<SearchCubit>().books,);
-                            }
-                            else{
+                            else if (state is SearchInitial){
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -122,6 +119,9 @@ class SearchScreen extends StatelessWidget {
                                   ),
                                 ],
                               );
+                            }
+                            else{
+                              return SearchResultsListveiw(books: context.read<SearchCubit>().books,);
                             }
                           } 
                         ),

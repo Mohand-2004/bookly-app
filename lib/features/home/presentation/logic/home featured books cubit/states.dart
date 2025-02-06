@@ -8,6 +8,11 @@ class FeaturedBooksLoadingState extends HomeFeaturedBooksState{}
 
 class FeaturedBooksSuccessState extends HomeFeaturedBooksState{}
 
+class PaginationErrorState extends HomeFeaturedBooksState{
+  final Failure failure;
+  PaginationErrorState(this.failure);
+}
+
 class FeaturedBooksErrorState extends HomeFeaturedBooksState{
   final Failure failure;
   FeaturedBooksErrorState(this.failure);
